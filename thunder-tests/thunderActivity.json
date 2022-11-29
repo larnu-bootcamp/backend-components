@@ -1,16 +1,1 @@
-[
-  {
-    "_id": "5c7eb9f0-29ea-4890-ad01-83c35edf35a2",
-    "colId": "history",
-    "containerId": "",
-    "name": "http://localhost:3000/notification",
-    "url": "http://localhost:3000/notifications",
-    "method": "GET",
-    "sortNum": 0,
-    "created": "2022-11-27T22:46:37.881Z",
-    "modified": "2022-11-27T23:13:56.895Z",
-    "headers": [],
-    "params": [],
-    "tests": []
-  }
-]
+[]

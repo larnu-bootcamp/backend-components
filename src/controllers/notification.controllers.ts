@@ -1,6 +1,12 @@
 import { NextFunction, Request, Response } from 'express';
 import { Notifications } from '../entity/Notifications';
 
+/**
+ * @param req
+ * @param res
+ * @param next
+ */
+
 export async function getNotifications(
   req: Request,
   res: Response,
@@ -64,6 +70,7 @@ export async function createNotifications(
     await newNotification.save();
 
     res.status(200).send(newNotification);
+
   } catch (error) {
     console.log(error);
     next();
