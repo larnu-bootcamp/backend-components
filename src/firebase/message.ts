@@ -1,10 +1,5 @@
 import admin from 'firebase-admin';
 import { Message } from 'firebase-admin/lib/messaging/messaging-api';
-// import { Message } from 'firebase-admin/lib/messaging/messaging-api';
-
-import { getMessaging } from "firebase/messaging";
-
-// // estructura
 
 // /**
 //  * const message ={
@@ -32,24 +27,20 @@ import { getMessaging } from "firebase/messaging";
 //   sendMessage(message);
 // }
 
-
-
 // Define a condition which will send to devices which are subscribed
 // to either the Google stock or the tech industry topics.
-const condition = '\'stock-GOOG\' in topics || \'industry-tech\' in topics';
+const condition = "'stock-GOOG' in topics || 'industry-tech' in topics";
 
 // See documentation on defining a message payload.
 const message = {
   notification: {
     title: '$FooCorp up 1.43% on the day',
-    body: '$FooCorp gained 11.80 points to close at 835.67, up 1.43% on the day.'
+    body: '$FooCorp gained 11.80 points to close at 835.67, up 1.43% on the day.',
   },
-  condition: condition
+  condition: condition,
 };
 
-
-
-export function sendMessage(message:Message) {
+export function sendMessage(message: Message) {
   admin
     .messaging()
     .send(message)
@@ -58,4 +49,3 @@ export function sendMessage(message:Message) {
 }
 
 sendMessage(message);
-
