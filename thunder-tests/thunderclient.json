@@ -97,5 +97,43 @@
     "headers": [],
     "params": [],
     "tests": []
+  },
+  {
+    "_id": "0d391f0a-fc29-4eb1-b0c0-c6a75e5f8c26",
+    "colId": "4f191270-aef9-48ef-b82f-9e957ba3c1c9",
+    "containerId": "",
+    "name": "register",
+    "url": "http://localhost:2000/auth/register",
+    "method": "POST",
+    "sortNum": 10000,
+    "created": "2022-11-29T18:00:49.947Z",
+    "modified": "2022-11-29T21:34:50.818Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"name\": \"test2\",\n  \"lastName\": \"test2\",\n  \"email\": \"testtest23.com\",\n  \"password\": \"121234\"\n}",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "f2086471-4192-419d-91e7-88d2d317b6a4",
+    "colId": "4f191270-aef9-48ef-b82f-9e957ba3c1c9",
+    "containerId": "",
+    "name": "login",
+    "url": "http://localhost:2000/auth/login",
+    "method": "POST",
+    "sortNum": 20000,
+    "created": "2022-11-29T21:24:14.968Z",
+    "modified": "2022-11-29T21:35:19.176Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"email\": \"test@test23.com\",\n  \"password\": \"12345test\"\n}",
+      "form": []
+    },
+    "tests": []
   }
 ]

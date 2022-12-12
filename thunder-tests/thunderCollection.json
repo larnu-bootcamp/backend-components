@@ -34,5 +34,12 @@
         "sortNum": 15000
       }
     ]
+  },
+  {
+    "_id": "4f191270-aef9-48ef-b82f-9e957ba3c1c9",
+    "colName": "USER",
+    "created": "2022-11-29T18:00:39.442Z",
+    "sortNum": 20000,
+    "folders": []
   }
 ]

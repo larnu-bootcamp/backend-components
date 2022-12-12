@@ -1,11 +1,8 @@
+import { create } from 'domain';
 import { NextFunction, Request, Response } from 'express';
-import { Notifications } from '../entity/Notifications';
-
-/**
- * @param req
- * @param res
- * @param next
- */
+import { db, dbMessage } from '..';
+import { createError } from '../middleware/errorHandle';
+import { exist, listItem, oneItem } from '../utils/firebase/object';
 
 export async function getNotifications(
   req: Request,
@@ -13,27 +10,46 @@ export async function getNotifications(
   next: NextFunction
 ) {
   try {
-    const { start, limit } = req.params;
-    const notifications = await Notifications.find({
-      skip: Number(start),
-      take: Number(limit),
-    });
-    res.status(200).send(notifications);
+    const notificationRef = db
+      .collection('user')
+      .doc(`${req.headers['name']}`)
+      .collection('notification');
+
+    const listNotification = await notificationRef.get().then(listItem);
+
+    console.log(listNotification);
+    console.log(!listNotification);
+    console.log(!!listNotification);
+
+    if (!listNotification)
+      return next(new createError(202, 'no hay notificación'));
+
+    return res.status(200).send({ listNotification });
   } catch (error) {
-    next();
+    return next(new createError());
   }
 }
 
 enum EOrientation {
-  android = 'android',
-  IOS = 'IOS',
-  androidAndIos = 'androidAndIos',
+  none,
+  android,
+  IOS,
+  androidAndIos,
 }
 
 enum EState {
-  programmed = 'programmed',
-  complete = 'complete',
-  recurrent = 'recurrent',
+  complete,
+  recurrent,
+  programmed,
+}
+
+interface IRequest {
+  title: string;
+  body: string;
+  img: string;
+  orientation: EOrientation;
+  state: EState;
+  time: Date;
 }
 
 export async function createNotifications(
@@ -42,38 +58,47 @@ export async function createNotifications(
   next: NextFunction
 ) {
   try {
-    const {
-      title,
-      description,
-      img,
-      orientation,
-      state,
-      time,
-    }: {
-      title: string;
-      description: string;
-      img: string;
-      orientation: EOrientation;
-      state: EState;
-      time: Date;
-    } = req.body;
+    let { title, body, img, orientation, state, time }: IRequest = req.body;
 
-    const newNotification = new Notifications();
+    if (!title)
+      return next(new createError(404, 'el campo title es obligatorio'));
 
-    newNotification.title = title;
-    newNotification.description = description;
-    newNotification.img = img;
-    newNotification.orientation = EOrientation[orientation];
-    newNotification.state = EState[state];
-    newNotification.time = time;
+    if (!body)
+      return next(new createError(404, 'el campo body es obligatorio'));
 
-    await newNotification.save();
+    let dataNotification;
 
-    res.status(200).send(newNotification);
+    if (img) {
+      dataNotification = {
+        title,
+        body,
+        img,
+        orientation: EOrientation[orientation || 'none'],
+        state: EState[state || 'complete'],
+        time: time || new Date(),
+      };
+    } else {
+      dataNotification = {
+        title,
+        body,
+        orientation: EOrientation[orientation || 'android'],
+        state: EState[state || 'complete'],
+        time: time || new Date(),
+      };
+    }
 
+    const notificationRef = db
+      .collection('user')
+      .doc(`${req.headers['name']}`)
+      .collection('notification')
+      .doc();
+
+    await notificationRef.set(dataNotification);
+
+    res.status(200).json('notificación creada correctamente');
   } catch (error) {
     console.log(error);
-    next();
+    return next(new createError());
   }
 }
 
@@ -83,20 +108,24 @@ export async function updateNotifications(
   next: NextFunction
 ) {
   try {
-    const { id } = req.params;
+    const notificationRef = db
+      .collection('user')
+      .doc(`${req.headers['name']}`)
+      .collection('notification');
 
-    const notification = await Notifications.findOneBy({
-      id: parseInt(id),
-    });
+    const notificationExist = notificationRef
+      .where('id', '==', req.params.id)
+      .get()
+      .then(exist);
 
-    if (!notification)
-      return res.status(404).send({ message: 'user not found' });
+    if (!notificationExist)
+      return next(new createError(404, 'notificación no  existe'));
 
-    await Notifications.update({ id: parseInt(id) }, req.body);
+    await notificationRef.doc(req.params.id).update({ ...req.body });
 
-    return res.status(200).send(notification);
+    return res.status(200).json('notificación modificada');
   } catch (error) {
-    next();
+    return next(new createError());
   }
 }
 
@@ -106,20 +135,75 @@ export async function deleteNotifications(
   next: NextFunction
 ) {
   try {
-    let { id } = req.params;
+    const notificationRef = db
+      .collection('user')
+      .doc(`${req.headers['name']}`)
+      .collection('notification');
 
-    const deleteNotification = await Notifications.findOneBy({
-      id: parseInt(id),
-    });
+    const notificationExist = notificationRef
+      .where('id', '==', req.params.id)
+      .get()
+      .then(exist);
 
-    if (!deleteNotification) {
-      return res.status(404).send({ message: 'user not found' });
-    }
+    if (!notificationExist)
+      return next(new createError(404, 'notificación no  existe'));
 
-    await Notifications.delete({ id: parseInt(id) });
+    await notificationRef.doc(req.params.id).delete();
 
     return res.status(404).send({ message: 'user deleted' });
-  } catch (error) {
-    next();
+  } catch (err: any) {
+    next(new createError(0, err.message));
+  }
+}
+
+export async function subscribeNotification(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const { topic } = req.body;
+    const token = req.header['name'];
+    if (!topic) {
+      return next(
+        new createError(404, 'ingrese el tema al cual quiere subscribirse')
+      );
+    }
+
+    if (!token) {
+      return next(new createError(404, 'no tiene permisos para inscribirse'));
+    }
+
+    dbMessage.subscribeToTopic(token, topic);
+
+    return res.status(400).json('subscripción exitosa');
+  } catch (err: any) {
+    next(new createError(0, err.message));
+  }
+}
+
+export async function unsubscribeNotification(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const { topic } = req.body;
+    const token = req.header['name'];
+    if (!topic) {
+      return next(
+        new createError(404, 'ingrese el tema al cual quiere subscribirse')
+      );
+    }
+
+    if (!token) {
+      return next(new createError(404, 'no tiene permisos para inscribirse'));
+    }
+
+    dbMessage.unsubscribeFromTopic(token, topic);
+
+    return res.status(400).json('subscripción cancelada');
+  } catch (err: any) {
+    next(new createError(0, err.message));
   }
 }

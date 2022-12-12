@@ -1,39 +1,51 @@
 # backend-components
 
-## Table of content
+## tabla de contenido
 
-- [About](#about)
-- [Getting started](#getting-started)
-- [Database commands](#database-commands)
-- [Starting the server](#starting-the-server)
-- [Thunder-Client](#thunder-client)
-- [Folder structure](#folder-structure)
+- [sobre el proyecto](#)
+- [iniciar](#iniciar)
+  - [lista de comandos](#lista-de-comandos)
+- [Estructura de archivos](#estructura-de-archivos)
 
-## About
+## iniciar
 
-## Getting started
+### lista de comandos
 
-## Database commands
-
-## Starting the server
+  para iniciar el proyecto ejecutamos
+  ```
+    npm run dev
+  ```
 
 ## Thunder-Client
 
-## Folder structure
+## Estructura de archivos
 
 ```
   .
+  └→ docs
+  |  └→ docs.yaml
+  |
   └→ img
   |  └→ dbDiagram.jpg
   |
   └→ src
   |  └→ config
+  |  |
   |  └→ controllers
+  |  |  └→ auth.controllers.ts
   |  |  └→ notification.controllers.ts
   |  |
   |  └→ entity
   |  |  └→ Notification.ts
   |  |  └→ User.ts
+  |  |
+  |  └→ middleware
+  |  |  └→ notification.ts
+  |  |  |  └→ notificationProgrammer.ts
+  |  |  |  └→ sendNotification.ts
+  |  |  |
+  |  |  └→ errorHandle.ts
+  |  |  └→ token.ts
   |  |
   |  └→ routers
   |  |  └→ auth.ts
@@ -44,8 +56,6 @@
   |  |     └→ keys
   |  |     └→ firebase.config.ts
   |  |     └→ message.ts
-  |  |
-  |  └→ utils
   |  |
   |  └→ app.ts
   |  └→ data-source.ts
