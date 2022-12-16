@@ -17,10 +17,6 @@ export async function getNotifications(
 
     const listNotification = await notificationRef.get().then(listItem);
 
-    console.log(listNotification);
-    console.log(!listNotification);
-    console.log(!!listNotification);
-
     if (!listNotification)
       return next(new createError(202, 'no hay notificación'));
 

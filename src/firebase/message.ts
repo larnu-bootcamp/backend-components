@@ -39,7 +39,6 @@ const message = {
   },
   condition: condition,
 };
-
 export function sendMessage(message: Message) {
   admin
     .messaging()
