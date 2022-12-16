@@ -23,7 +23,7 @@ app.use(helmet());
 app.use(authRouter);
 app.use(notificationRouter);
 
-const swaggerJsDocs = YAML.load('./docs/docs.yaml');
+const swaggerJsDocs = YAML.load('./docs/doc.yaml');
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerJsDocs));
 
 app.use(handleError);
