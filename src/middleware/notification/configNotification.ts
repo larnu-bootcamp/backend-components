@@ -1,59 +1,55 @@
-import { Message } from 'firebase-admin/lib/messaging/messaging-api';
+import { EOrientation } from '../../enum/optionNotification';
 
 export function configurationNotification(
-  time: Date,
   title: string,
   body: string,
-  orientation: string,
-  image?: string
+  orientation: number,
+  imageUrl?: string
 ) {
-  let config: Message = {
-    notification: { title, body, imageUrl: image },
-    webpush: { notification: { title, body, image } },
-    android: { notification: { title, body, imageUrl } },
-    apns: { payload:{aps:{}}},
+  let config = {};
+
+  const notification = {
+    title,
+    body,
+    imageUrl,
   };
 
-  const notification = {};
-  const webpush = {};
-  const android = {};
-  const apns = {};
-
-  if (image) {
-    if (orientation) {
+  if (imageUrl) {
+    if (EOrientation[orientation] === EOrientation[0]) {
       config = {
-        webpush: { notification: { title, body, image } },
+        webpush: { notification },
       };
-    } else if (orientation) {
+    } else if (EOrientation[orientation] === EOrientation[1]) {
       config = {
-        android: { notification: { title, body, image } },
+        android: { notification },
       };
-    } else if (orientation) {
-      config = {
-        appnl: { notification: { title, body, image } },
-      };
+    } else if (EOrientation[orientation] === EOrientation[2]) {
+      config: {
+        apns: {
+          payload: notification;
+        }
+      }
     } else {
-      config = {
-        webpush: { notification: { title, body, image } },
-      };
+      config = { notification };
     }
   } else {
-    if (orientation) {
+    if (EOrientation[orientation] === EOrientation[0]) {
       config = {
-        webpush: { notification: { title, body, image } },
+        webpush: { notification: { title, body } },
       };
-    } else if (orientation) {
+    } else if (EOrientation[orientation] === EOrientation[1]) {
       config = {
-        webpush: { notification: { title, body, image } },
+        android: { notification: { title, body } },
       };
-    } else if (orientation) {
+    } else if (EOrientation[orientation] === EOrientation[2]) {
       config = {
-        webpush: { notification: { title, body, image } },
+        apns: { payload: { title, body } },
       };
     } else {
       config = {
-        webpush: { notification: { title, body, image } },
+        notification: { notification: { title, body } },
       };
     }
   }
+  return config;
 }
