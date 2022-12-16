@@ -1,8 +1,9 @@
-import { create } from 'domain';
 import { NextFunction, Request, Response } from 'express';
 import { db, dbMessage } from '..';
 import { createError } from '../middleware/errorHandle';
-import { exist, listItem, oneItem } from '../utils/firebase/object';
+import { exist, listItem } from '../utils/firebase/object';
+import { EOrientation, EState } from '../enum/optionNotification';
+import { IStructureMessage } from '../interfaces/dataNotification';
 
 export async function getNotifications(
   req: Request,
@@ -26,35 +27,14 @@ export async function getNotifications(
   }
 }
 
-enum EOrientation {
-  none,
-  android,
-  IOS,
-  androidAndIos,
-}
-
-enum EState {
-  complete,
-  recurrent,
-  programmed,
-}
-
-interface IRequest {
-  title: string;
-  body: string;
-  img: string;
-  orientation: EOrientation;
-  state: EState;
-  time: Date;
-}
-
 export async function createNotifications(
   req: Request,
   res: Response,
   next: NextFunction
 ) {
   try {
-    let { title, body, img, orientation, state, time }: IRequest = req.body;
+    let { title, body, img, orientation, state, time }: IStructureMessage =
+      req.body;
 
     if (!title)
       return next(new createError(404, 'el campo title es obligatorio'));
@@ -77,7 +57,7 @@ export async function createNotifications(
       dataNotification = {
         title,
         body,
-        orientation: EOrientation[orientation || 'android'],
+        orientation: EOrientation[orientation || 'none'],
         state: EState[state || 'complete'],
         time: time || new Date(),
       };

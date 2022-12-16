@@ -1,7 +1,9 @@
+import { EOrientation } from '../../enum/optionNotification';
+
 export function configurationNotification(
   title: string,
   body: string,
-  orientation: string,
+  orientation: number,
   imageUrl?: string
 ) {
   let config = {};
@@ -13,15 +15,15 @@ export function configurationNotification(
   };
 
   if (imageUrl) {
-    if (orientation) {
+    if (EOrientation[orientation] === EOrientation[0]) {
       config = {
         webpush: { notification },
       };
-    } else if (orientation) {
+    } else if (EOrientation[orientation] === EOrientation[1]) {
       config = {
         android: { notification },
       };
-    } else if (orientation) {
+    } else if (EOrientation[orientation] === EOrientation[2]) {
       config: {
         apns: {
           payload: notification;
@@ -31,15 +33,15 @@ export function configurationNotification(
       config = { notification };
     }
   } else {
-    if (orientation) {
+    if (EOrientation[orientation] === EOrientation[0]) {
       config = {
         webpush: { notification: { title, body } },
       };
-    } else if (orientation) {
+    } else if (EOrientation[orientation] === EOrientation[1]) {
       config = {
         android: { notification: { title, body } },
       };
-    } else if (orientation) {
+    } else if (EOrientation[orientation] === EOrientation[2]) {
       config = {
         apns: { payload: { title, body } },
       };
