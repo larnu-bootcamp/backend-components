@@ -7,7 +7,8 @@
     "dev": "ts-node-dev --respawn src/index.ts",
     "format": "prettier --write",
     "lint": "eslint --fix . --ext .ts",
-    "build": "tsc"
+    "build": "tsc",
+    "start": "node ./build/index.js"
   },
   "keywords": [],
   "author": "",
