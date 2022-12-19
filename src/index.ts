@@ -1,6 +1,7 @@
 import { app } from './app';
 import admin from 'firebase-admin';
 import dotenv from 'dotenv';
+import { applicationDefault } from 'firebase-admin/app';
 
 dotenv.config();
 
