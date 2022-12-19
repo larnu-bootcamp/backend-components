@@ -11,9 +11,8 @@ export function sendNow(
 ) {
   const configDevice = configurationNotification(title, body, orientation, img);
   const message = {
-    configDevice
-    
-  }
+    configDevice,
+  };
   sendMessage(message);
 }
 
