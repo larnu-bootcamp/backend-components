@@ -12,16 +12,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.dbCheck = exports.dbMessage = exports.dbAuth = exports.db = void 0;
+exports.dbMessage = exports.dbAuth = exports.db = void 0;
 const app_1 = require("./app");
 const firebase_admin_1 = __importDefault(require("firebase-admin"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
-const port = Number(process.env.CONNECT_PORT);
+const port = Number(process.env.PORT);
 const service = require(`${__dirname}${process.env.DIR_FIREBASE_KEY}`);
 firebase_admin_1.default.initializeApp({
     credential: firebase_admin_1.default.credential.cert(service),
-    projectId: 'my-second-project-3113f',
 });
 function connect() {
     return __awaiter(this, void 0, void 0, function* () {
@@ -45,4 +44,3 @@ connect();
 exports.db = firebase_admin_1.default.firestore();
 exports.dbAuth = firebase_admin_1.default.auth();
 exports.dbMessage = firebase_admin_1.default.messaging();
-exports.dbCheck = firebase_admin_1.default.appCheck();

@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { db, dbAuth, dbCheck } from '..';
+import { dbAuth } from '..';
 import { createError } from './errorHandle';
 
 export async function isAuthenticate(

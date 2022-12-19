@@ -4,12 +4,11 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const port: number = Number(process.env.CONNECT_PORT);
+const port: number = Number(process.env.PORT);
 const service = require(`${__dirname}${process.env.DIR_FIREBASE_KEY}`);
 
 admin.initializeApp({
   credential: admin.credential.cert(service),
-  projectId: 'my-second-project-3113f',
 });
 
 async function connect() {
@@ -32,4 +31,3 @@ connect();
 export const db = admin.firestore();
 export const dbAuth = admin.auth();
 export const dbMessage = admin.messaging();
-export const dbCheck = admin.appCheck();

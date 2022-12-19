@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import * as bcrypt from 'bcryptjs';
 import { createError } from '../middleware/errorHandle';
-import { db, dbAuth, dbCheck } from '..';
+import { db, dbAuth } from '..';
 import { IUser } from '../interfaces/dataNotification';
 
 export async function register(
