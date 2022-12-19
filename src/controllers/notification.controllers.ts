@@ -21,7 +21,7 @@ export async function getNotifications(
     if (!listNotification)
       return next(new createError(202, 'no hay notificación'));
 
-    return res.status(200).send({ listNotification });
+    return res.status(200).send({ data: { listNotification } });
   } catch (error) {
     return next(new createError());
   }
@@ -33,8 +33,15 @@ export async function createNotifications(
   next: NextFunction
 ) {
   try {
-    let { title, body, img, orientation, state, time }: IStructureMessage =
-      req.body;
+    let {
+      title,
+      body,
+      img,
+      orientation,
+      state,
+      time,
+      days,
+    }: IStructureMessage = req.body;
 
     if (!title)
       return next(new createError(404, 'el campo title es obligatorio'));
@@ -42,26 +49,17 @@ export async function createNotifications(
     if (!body)
       return next(new createError(404, 'el campo body es obligatorio'));
 
-    let dataNotification;
+    if (!img) img = '';
 
-    if (img) {
-      dataNotification = {
-        title,
-        body,
-        img,
-        orientation: EOrientation[orientation || 'none'],
-        state: EState[state || 'complete'],
-        time: time || new Date(),
-      };
-    } else {
-      dataNotification = {
-        title,
-        body,
-        orientation: EOrientation[orientation || 'none'],
-        state: EState[state || 'complete'],
-        time: time || new Date(),
-      };
-    }
+    const dataNotification = {
+      title,
+      body,
+      img,
+      orientation: EOrientation[orientation || 'none'],
+      state: EState[state || 'complete'],
+      time: time || new Date(),
+      days,
+    };
 
     const notificationRef = db
       .collection('user')

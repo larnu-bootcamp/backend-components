@@ -14,7 +14,7 @@ export function configurationNotification(
     imageUrl,
   };
 
-  if (imageUrl) {
+  if (imageUrl === '') {
     if (EOrientation[orientation] === EOrientation[0]) {
       config = {
         webpush: { notification },

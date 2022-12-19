@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import * as bcrypt from 'bcryptjs';
 import { createError } from '../middleware/errorHandle';
-import { db, dbAuth, dbCheck } from '..';
+import { db, dbAuth } from '..';
 import { IUser } from '../interfaces/dataNotification';
 
 export async function register(
@@ -61,12 +61,6 @@ export async function login(req: Request, res: Response, next: NextFunction) {
       return next(new createError(400, 'correo o contraseña no es correcta'));
 
     console.log(userExist.uid);
-
-    // const token = await dbAuth.createCustomToken(userExist.uid);
-
-    const token = await dbCheck.createToken(userExist.uid);
-
-    console.log(token);
 
     return res
       .status(200)
