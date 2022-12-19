@@ -1,0 +1,14 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.notificationRouter = void 0;
+const express_1 = require("express");
+const notification_controllers_1 = require("../controllers/notification.controllers");
+const token_1 = require("../middleware/token");
+const notificationRouter = (0, express_1.Router)();
+exports.notificationRouter = notificationRouter;
+notificationRouter.get('/notifications', token_1.isAuthenticate, notification_controllers_1.getNotifications);
+notificationRouter.post('/notification', token_1.isAuthenticate, notification_controllers_1.createNotifications);
+notificationRouter.put('/notification/:id', token_1.isAuthenticate, notification_controllers_1.updateNotifications);
+notificationRouter.delete('/notification/:id', token_1.isAuthenticate, notification_controllers_1.deleteNotifications);
+notificationRouter.post('/notification/subscribe', token_1.isAuthenticate, notification_controllers_1.subscribeNotification);
+notificationRouter.post('/notification/unsubscribe', token_1.isAuthenticate, notification_controllers_1.unsubscribeNotification);

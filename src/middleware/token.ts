@@ -16,14 +16,6 @@ export async function isAuthenticate(
     const isAuth = await dbAuth.verifyIdToken(authenticate);
 
     if (!isAuth) return next(new createError(404, 'no esta autorizado'));
-
-    const appCheakToken = req.header('X-Firebase-AppCheck');
-
-    if (!appCheakToken)
-      return next(new createError(401, 'no tiene autorizacion'));
-
-    const appCheckClaim = await dbCheck.verifyToken(appCheakToken)  
-
   } catch (err: any) {
     next(new createError(0, err.message));
   }
