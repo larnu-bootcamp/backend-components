@@ -21,6 +21,8 @@ export async function getNotifications(
     if (!listNotification)
       return next(new createError(202, 'no hay notificación'));
 
+    
+
     return res.status(200).send({ data: { listNotification } });
   } catch (error) {
     return next(new createError());
