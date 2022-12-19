@@ -1,6 +1,7 @@
 import { app } from './app';
 import admin from 'firebase-admin';
 import dotenv from 'dotenv';
+import { applicationDefault } from 'firebase-admin/app';
 
 dotenv.config();
 
@@ -9,7 +10,6 @@ const service = require(`${__dirname}${process.env.DIR_FIREBASE_KEY}`);
 
 admin.initializeApp({
   credential: admin.credential.cert(service),
-  projectId: 'my-second-project-3113f',
 });
 
 async function connect() {

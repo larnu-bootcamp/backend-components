@@ -33,8 +33,15 @@ export async function createNotifications(
   next: NextFunction
 ) {
   try {
-    let { title, body, img, orientation, state, time }: IStructureMessage =
-      req.body;
+    let {
+      title,
+      body,
+      img,
+      orientation,
+      state,
+      time,
+      days,
+    }: IStructureMessage = req.body;
 
     if (!title)
       return next(new createError(404, 'el campo title es obligatorio'));
@@ -52,6 +59,7 @@ export async function createNotifications(
         orientation: EOrientation[orientation || 'none'],
         state: EState[state || 'complete'],
         time: time || new Date(),
+        days,
       };
     } else {
       dataNotification = {
@@ -60,6 +68,7 @@ export async function createNotifications(
         orientation: EOrientation[orientation || 'none'],
         state: EState[state || 'complete'],
         time: time || new Date(),
+        days,
       };
     }
 

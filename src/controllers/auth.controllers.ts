@@ -62,12 +62,6 @@ export async function login(req: Request, res: Response, next: NextFunction) {
 
     console.log(userExist.uid);
 
-    // const token = await dbAuth.createCustomToken(userExist.uid);
-
-    const token = await dbCheck.createToken(userExist.uid);
-
-    console.log(token);
-
     return res
       .status(200)
       .header({ user: userExist.uid })
